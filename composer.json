@@ -1,0 +1,54 @@
+{
+    "name": "adamhut/approvable",
+    "description": "A Simple package to put a approval or denial to model",
+    "keywords": [
+        "adamhut",
+        "approvable"
+    ],
+    "homepage": "https://github.com/adamhut/approvable",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Adam Huang",
+            "email": "adamhut@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "illuminate/support": "5.7.*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "3.7.*",
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Adamhut\\Approvable\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Adamhut\\Approvable\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Adamhut\\Approvable\\ApprovableServiceProvider"
+            ],
+            "aliases": {
+                "Approvable": "Adamhut\\Approvable\\ApprovableFacade"
+            }
+        }
+    }
+}
