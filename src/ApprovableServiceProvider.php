@@ -2,45 +2,33 @@
 
 namespace Adamhut\Approvable;
 
+use Illuminate\Support\Collection;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
+use Adamhut\Approvable\Commands\ApprovalSummary;
 
 class ApprovableServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(Filesystem $filesystem)
     {
-        /*
-         * Optional methods to load your package assets
-         */
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'approvable');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'approvable');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('approvable.php'),
             ], 'config');
 
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/approvable'),
-            ], 'views');*/
+             $this->publishes([
+                __DIR__. '/../database/migrations/create_approvals_table.php.stub' => $this->getMigrationFileName($filesystem),
+            ], 'migrations');
 
-            // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/approvable'),
-            ], 'assets');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/approvable'),
-            ], 'lang');*/
 
             // Registering package commands.
-            // $this->commands([]);
+            $this->commands([
+                ApprovalSummary::class
+            ]);
         }
     }
 
@@ -56,5 +44,22 @@ class ApprovableServiceProvider extends ServiceProvider
         $this->app->singleton('approvable', function () {
             return new Approvable;
         });
+    }
+
+    /**
+     * Returns existing migration file if found, else uses the current timestamp.
+     *
+     * @param Filesystem $filesystem
+     * @return string
+     */
+    protected function getMigrationFileName(Filesystem $filesystem): string
+    {
+        $timestamp = date('Y_m_d_His');
+
+        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
+            ->flatMap(function ($path) use ($filesystem) {
+                return $filesystem->glob($path.'*_create_permission_tables.php');
+            })->push($this->app->databasePath()."/migrations/{$timestamp}_create_approvals_table.php")
+            ->first();
     }
 }

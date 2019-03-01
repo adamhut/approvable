@@ -1,4 +1,4 @@
-# Very short description of the package
+# Simple flag a model as approve or deny 
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/adamhut/approvable.svg?style=flat-square)](https://packagist.org/packages/adamhut/approvable)
 [![Build Status](https://img.shields.io/travis/adamhut/approvable/master.svg?style=flat-square)](https://travis-ci.org/adamhut/approvable)
@@ -18,7 +18,52 @@ composer require adamhut/approvable
 ## Usage
 
 ``` php
-// Usage description here
+
+php artisan vendor:publish --provider="Adamhut\Approvable\ApprovableServiceProvider" --tag="migrations"
+
+php artisan migrate
+
+```
+
+First, add the Adamhut\Approvable\Traits\Approvable trait to your User model(s):
+
+```php
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Adamhut\Approvable\Traits\Approvable;
+
+class User extends Authenticatable
+{
+    use Approvable;
+
+    // ...
+}
+
+$user->isPending(); //true
+$user->isApproved() //false
+$user->isDenied();  //false
+
+$user->approve();
+
+$user->isApproved() //true
+$user->isPending(); //false
+$user->isDenied(); //false
+
+$user->deny();
+$user->isDenied()   //true
+$user->isApproved() //false
+$user->isPending(); //false
+
+
+```
+
+### Command
+We alse provide a summery command
+
+```php 
+
+php artisan approval:summary
+
 ```
 
 ### Testing

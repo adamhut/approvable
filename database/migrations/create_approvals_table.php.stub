@@ -15,7 +15,6 @@ class CreateApprovalsTable extends Migration
     {
         Schema::create('approvals', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
             $table->unsignedInteger('approvable_id')->index();
             $table->string('approvable_type');
             $table->boolean('approved')->nullable();

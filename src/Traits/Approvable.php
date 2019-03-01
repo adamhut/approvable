@@ -1,12 +1,11 @@
 <?php
 
-namespace Adamhut\Approvable;
+namespace Adamhut\Approvable\Traits;
 
 use Adamhut\Approvable\Approval;
 
 trait Approvable
 {
-
     public function approve($remark=null)
     {
         if ($this->approval) {
