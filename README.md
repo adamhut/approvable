@@ -61,16 +61,10 @@ $user->isPending(); //false
 We alse provide a summery command
 
 ```php 
-
 php artisan approval:summary
 
 ```
 
-### Testing
-
-``` bash
-composer test
-```
 
 ### Changelog
 
