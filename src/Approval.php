@@ -15,7 +15,7 @@ class Approval extends Model
 
     public function approvable()
     {
-        //This will find out what the relative activity it related to 
+        //This will find out what the relative activity it related to
         return $this->morphTo();
     }
 
